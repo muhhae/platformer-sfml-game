@@ -19,7 +19,7 @@ void input()
             if (!full) window.create(sf::VideoMode().getDesktopMode(), "My Game", sf::Style::Fullscreen);
             else window.create(sf::VideoMode(1024, 728), "My Game", sf::Style::Default);
             full = 1 - full;
-            window.setFramerateLimit(80);
+            window.setFramerateLimit(100);
             view.setSize(window.getSize().x/2, window.getSize().y/2);
         }
     }
@@ -39,7 +39,7 @@ int main()
 
     bool moveJump;
 
-    window.setFramerateLimit(80);
+    window.setFramerateLimit(100);
 
     sf::Texture txt_knight;
     int frame = 0;
@@ -96,13 +96,12 @@ int main()
                     move = false;
                     frame = 0;
                     jump = 5;
-                    std::cout<<spr_knight.getPosition().y<<std::endl;
+                    // std::cout<<spr_knight.getPosition().y<<std::endl;
                 }
             }
             input();
 
-            if (jump == 0)
-            {
+            
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) 
                 {
                     if (!move)
@@ -126,7 +125,7 @@ int main()
                 {
                     move = false;
                 }
-            }
+            
 
         }
 
