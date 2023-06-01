@@ -44,8 +44,8 @@ int main()
     sf::Texture txt_knight;
     int frame = 0;
 
-    sf::RectangleShape box(sf::Vector2f(100, 100));
-    box.setOrigin(50, 100);
+    sf::RectangleShape box(sf::Vector2f(1720, 1080));
+    box.setOrigin(box.getSize().x/2, box.getSize().y/2);
 
     sf::Sprite spr_knight;
 
@@ -54,23 +54,46 @@ int main()
     ImageStorage Knight_jump;
     ImageStorage Knight_fall;
 
+    sf::Texture bg;
+    bg.loadFromFile("Sprite/BG/bg.gif");
+
+    sf::Sprite background;
+
+    background.setTexture(bg);
+    background.setTextureRect(sf::IntRect(0, 200, 1920, 1080));
+    background.setOrigin(bg.getSize().x/2, bg.getSize().y/2);
+
+    
+
     Knight_idle.load("Idle", 10);
     Knight_run.load("Run", 10, "Sprite/Knight");
     Knight_jump.load("Jump", 3, "Sprite/Knight");
     Knight_fall.load("Fall", 3, "Sprite/Knight");
 
-    spr_knight.setOrigin(50, 80);
-    spr_knight.setScale(3,3);
-    spr_knight.setPosition(100, 400);
-
     txt_knight.loadFromImage(Knight_idle.getImg(0));
     spr_knight.setTexture(txt_knight);
 
+    spr_knight.setOrigin(55, 80);
+    spr_knight.setScale(3,3);
+    spr_knight.setPosition(100, 400);
 
     box.setPosition(spr_knight.getPosition());
 
     view.setCenter(spr_knight.getPosition().x, spr_knight.getPosition().y);
     view.setSize(window.getSize().x/2, window.getSize().y/2);
+
+    
+    background.setPosition(sf::Vector2f(view.getCenter()));
+    background.move(0, 240);
+
+    box.setPosition(background.getPosition());
+    box.move(0, -580);
+
+    sf::Color col;
+    col.Black;
+    col.a = 150;
+
+    box.setFillColor(col);
 
     while (window.isOpen())
     {
@@ -90,7 +113,7 @@ int main()
         {   
             if (event.type == sf::Event::KeyReleased)
             {
-                if (event.key.code == sf::Keyboard::Space && jump == 0)
+                if ((event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W) && jump == 0)
                 {
                     if (move) moveJump = true;
                     move = false;
@@ -100,31 +123,30 @@ int main()
                 }
             }
             input();
-
             
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) 
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
+            {
+                if (!move)
                 {
-                    if (!move)
-                    {
-                        frame = 0;
-                        move = true;
-                    }
-                    
-                    kanan = true;
+                    frame = 0;
+                    move = true;
                 }
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                
+                kanan = true;
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            {
+                if (!move)
                 {
-                    if (!move)
-                    {
-                        frame = 0;
-                        move = true;
-                    }
-                    kanan = false;
+                    frame = 0;
+                    move = true;
                 }
-                else 
-                {
-                    move = false;
-                }
+                kanan = false;
+            }
+            else 
+            {
+                move = false;
+            }
             
 
         }
@@ -147,7 +169,9 @@ int main()
         view.setCenter(spr_knight.getPosition().x, view.getCenter().y);
 
         window.setView(view);
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color::Black);\
+
+        window.draw(background);
         window.draw(box);
         window.draw(spr_knight);
         window.display();
