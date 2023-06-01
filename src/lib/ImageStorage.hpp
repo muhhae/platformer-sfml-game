@@ -12,5 +12,5 @@ class ImageStorage
         ImageStorage();
         ImageStorage(std::string state, int count, std::string dir = "Sprite/Knight", std::string extension = "gif");
         void load(std::string state, int count, std::string dir = "Sprite/Knight", std::string extension = "gif");
-        sf::Image& getImg(int frame);
+        sf::Image& getImg(int frame, int maxFrame = 80);
 };

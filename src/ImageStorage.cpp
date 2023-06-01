@@ -20,7 +20,8 @@ void ImageStorage::load(std::string state, int count, std::string dir, std::stri
         img.at(i).loadFromFile(dir + "/" + state + "/" + std::to_string(i) + "." + extension);
     }
 }
-sf::Image& ImageStorage::getImg(int frame)
+sf::Image& ImageStorage::getImg(int frame, int maxFrame)
 {
+    frame = frame / (maxFrame/img.size());
     return img.at(frame);
 }

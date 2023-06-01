@@ -6,9 +6,6 @@ sf::View view;
 
 bool full = true;
 
-int x = 0;
-int y = 0;
-
 void input()
 {
     if (event.type == sf::Event::Closed) window.close();
@@ -30,23 +27,7 @@ void input()
     if (event.type == sf::Event::Resized)
     {
         view.setSize(event.size.width/2, event.size.height/2);
-        // std::cout<<"tes"<<std::endl;
     }
-
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) y += 1;
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) y -= 1;
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) x += 1;
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) x -= 1;
-
-    
-    
-    
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::B)) window.setSize(sf::Vector2u(800, 600));
-    // if (event.type == sf::Event::TextEntered)
-    // {
-    //     if (event.text.unicode < 128)
-    //         std::cout << "ASCII character typed: " << static_cast<char>(event.text.unicode) << std::endl;
-    // }
 }
 
 int main()
@@ -55,7 +36,8 @@ int main()
     bool move = 0;
 
     float jump = 0;
-    
+
+    bool moveJump;
 
     window.setFramerateLimit(80);
 
@@ -65,18 +47,17 @@ int main()
     sf::RectangleShape box(sf::Vector2f(100, 100));
     box.setOrigin(50, 100);
 
-    // sf::Image img_knight;
-    // img_knight.loadFromFile("Sprite/Knight/Idle/0.gif");
-
     sf::Sprite spr_knight;
 
     ImageStorage Knight_run;
     ImageStorage Knight_idle;
+    ImageStorage Knight_jump;
+    ImageStorage Knight_fall;
 
     Knight_idle.load("Idle", 10);
-    Knight_run.load("Run", 10, "Sprite/Knight", "gif");
-
-    // window.setVerticalSyncEnabled(true);
+    Knight_run.load("Run", 10, "Sprite/Knight");
+    Knight_jump.load("Jump", 3, "Sprite/Knight");
+    Knight_fall.load("Fall", 3, "Sprite/Knight");
 
     spr_knight.setOrigin(50, 80);
     spr_knight.setScale(3,3);
@@ -93,75 +74,78 @@ int main()
 
     while (window.isOpen())
     {
+        spr_knight.setScale(3,3);
+
         frame++;
         if (frame > 59) frame = 0;
 
-        x = 0;
-        y = 0;
-
-        // if (spr_knight.getPosition().y > 400 && !jump) spr_knight.move(sf::Vector2f(0, -1));
-
         if (spr_knight.getPosition().y < 600) jump -= 0.1;
 
-        if (spr_knight.getPosition().y >= 600) jump = 0;
-
+        if (spr_knight.getPosition().y >= 600) 
+        {
+            moveJump = 0;
+            jump = 0;
+        }
         while (window.pollEvent(event))
         {   
             if (event.type == sf::Event::KeyReleased)
             {
                 if (event.key.code == sf::Keyboard::Space && jump == 0)
                 {
+                    if (move) moveJump = true;
+                    move = false;
+                    frame = 0;
                     jump = 5;
                     std::cout<<spr_knight.getPosition().y<<std::endl;
                 }
             }
             input();
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) 
+
+            if (jump == 0)
             {
-                if (!move)
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) 
                 {
-                    frame = 0;
-                    move = true;
+                    if (!move)
+                    {
+                        frame = 0;
+                        move = true;
+                    }
+                    
+                    kanan = true;
                 }
-                
-                kanan = true;
-            }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-            {
-                if (!move)
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
                 {
-                    frame = 0;
-                    move = true;
+                    if (!move)
+                    {
+                        frame = 0;
+                        move = true;
+                    }
+                    kanan = false;
                 }
-                kanan = false;
-            }
-            else 
-            {
-                // std::cout<<"henti"<<std::endl;
-                move = false;
+                else 
+                {
+                    move = false;
+                }
             }
 
         }
 
         spr_knight.move(sf::Vector2f(0, jump * -1));
         
-        if (move) txt_knight.update(Knight_run.getImg(frame/6));
-        else txt_knight.update(Knight_idle.getImg(frame/6));
-        
+        if (move) txt_knight.update(Knight_run.getImg(frame));
+        else txt_knight.update(Knight_idle.getImg(frame));
 
-        // std::cout<<"move : "<<(move ? "true" : "false")<<std::endl;
-        // std::cout<<"frame : "<<frame/6<<std::endl;
+        if (jump > 0) txt_knight.update(Knight_jump.getImg(frame));
+        else if (jump < 0) txt_knight.update(Knight_fall.getImg(frame));
 
-        if (kanan) spr_knight.setScale(3,3);
-        else spr_knight.setScale(-3, 3);
+        if (kanan) spr_knight.scale(1, 1);
+        else spr_knight.scale(-1, 1);
 
-        if (move && kanan) spr_knight.move(2,0);
+        if (( move || moveJump ) && kanan) spr_knight.move(2,0);
 
-        else if (move) spr_knight.move(-2, 0);
+        else if (( move || moveJump )) spr_knight.move(-2, 0);
 
         view.setCenter(spr_knight.getPosition().x, view.getCenter().y);
-        // std::cout<<"cam pos: "<<view.getCenter().x<<" "<<view.getCenter().y<<std::endl;
-        // view.setViewport(sf::FloatRect(0, 0, 1, 1));
 
         window.setView(view);
         window.clear(sf::Color::Black);
