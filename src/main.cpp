@@ -1,8 +1,10 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
+#include "lib/lib.hpp"
 
-sf::RenderWindow window(sf::VideoMode(800, 600), "My Game", sf::Style::Default);
+sf::RenderWindow window(sf::VideoMode().getDesktopMode(), "My Game", sf::Style::Fullscreen);
 sf::Event event;
+sf::View view;
+
+bool full = true;
 
 int x = 0;
 int y = 0;
@@ -10,14 +12,35 @@ int y = 0;
 void input()
 {
     if (event.type == sf::Event::Closed) window.close();
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
+
+    if (event.type == sf::Event::KeyReleased)
+    {
+        if (event.key.code == sf::Keyboard::X)
+        {
+            if (!full) window.create(sf::VideoMode().getDesktopMode(), "My Game", sf::Style::Fullscreen);
+            else window.create(sf::VideoMode(1024, 728), "My Game", sf::Style::Default);
+            full = 1 - full;
+            window.setFramerateLimit(80);
+            view.setSize(window.getSize().x/2, window.getSize().y/2);
+        }
+    }
+
+    if (event.type == sf::Event::Resized)
+    {
+        view.setSize(event.size.width/2, event.size.height/2);
+        // std::cout<<"tes"<<std::endl;
+    }
 
     // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) y += 1;
     // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) y -= 1;
     // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) x += 1;
     // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) x -= 1;
 
-    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) window.setSize(sf::Vector2u(1024, 720));
+    
+    
+    
     // if (sf::Keyboard::isKeyPressed(sf::Keyboard::B)) window.setSize(sf::Vector2u(800, 600));
     // if (event.type == sf::Event::TextEntered)
     // {
@@ -31,7 +54,10 @@ int main()
     bool kanan;
     bool move = 0;
 
-    window.setFramerateLimit(60);
+    float jump = 0;
+    
+
+    window.setFramerateLimit(80);
 
     sf::Texture txt_knight;
     int frame = 0;
@@ -44,18 +70,11 @@ int main()
 
     sf::Sprite spr_knight;
 
-    sf::Image img_knight[10];
-    sf::Image img_knight_run[10];
+    ImageStorage Knight_run;
+    ImageStorage Knight_idle;
 
-
-
-
-    for (int i = 0; i < 10; i++)
-    {
-        img_knight[i].loadFromFile("Sprite/Knight/Idle/" + std::to_string(i) + ".gif");
-        img_knight_run[i].loadFromFile("Sprite/Knight/Run/" + std::to_string(i) + ".gif");
-        // std::cout<<("Sprite/Knight/Run/" + std::to_string(i) + ".gif")<<std::endl;
-    }
+    Knight_idle.load("Idle", 10);
+    Knight_run.load("Run", 10, "Sprite/Knight", "gif");
 
     // window.setVerticalSyncEnabled(true);
 
@@ -63,11 +82,14 @@ int main()
     spr_knight.setScale(3,3);
     spr_knight.setPosition(100, 400);
 
-    txt_knight.loadFromImage(img_knight_run[0]);
+    txt_knight.loadFromImage(Knight_idle.getImg(0));
     spr_knight.setTexture(txt_knight);
 
 
     box.setPosition(spr_knight.getPosition());
+
+    view.setCenter(spr_knight.getPosition().x, spr_knight.getPosition().y);
+    view.setSize(window.getSize().x/2, window.getSize().y/2);
 
     while (window.isOpen())
     {
@@ -77,8 +99,22 @@ int main()
         x = 0;
         y = 0;
 
+        // if (spr_knight.getPosition().y > 400 && !jump) spr_knight.move(sf::Vector2f(0, -1));
+
+        if (spr_knight.getPosition().y < 600) jump -= 0.1;
+
+        if (spr_knight.getPosition().y >= 600) jump = 0;
+
         while (window.pollEvent(event))
-        {
+        {   
+            if (event.type == sf::Event::KeyReleased)
+            {
+                if (event.key.code == sf::Keyboard::Space && jump == 0)
+                {
+                    jump = 5;
+                    std::cout<<spr_knight.getPosition().y<<std::endl;
+                }
+            }
             input();
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) 
             {
@@ -107,10 +143,11 @@ int main()
 
         }
 
+        spr_knight.move(sf::Vector2f(0, jump * -1));
         
-
-        if (move) txt_knight.update(img_knight_run[frame/6]);
-        else txt_knight.update(img_knight[frame/6]);
+        if (move) txt_knight.update(Knight_run.getImg(frame/6));
+        else txt_knight.update(Knight_idle.getImg(frame/6));
+        
 
         // std::cout<<"move : "<<(move ? "true" : "false")<<std::endl;
         // std::cout<<"frame : "<<frame/6<<std::endl;
@@ -122,6 +159,11 @@ int main()
 
         else if (move) spr_knight.move(-2, 0);
 
+        view.setCenter(spr_knight.getPosition().x, view.getCenter().y);
+        // std::cout<<"cam pos: "<<view.getCenter().x<<" "<<view.getCenter().y<<std::endl;
+        // view.setViewport(sf::FloatRect(0, 0, 1, 1));
+
+        window.setView(view);
         window.clear(sf::Color::Black);
         window.draw(box);
         window.draw(spr_knight);
