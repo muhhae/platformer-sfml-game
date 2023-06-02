@@ -33,7 +33,6 @@ int main()
     view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
     view.setSize(window.getSize().x/2, window.getSize().y/2);
 
-    
     background.setPosition(sf::Vector2f(view.getCenter()));
     background.move(0, 240);
 
@@ -72,7 +71,7 @@ int main()
             {
                 view.setSize(event.size.width/2, event.size.height/2);
             }
-            
+
             Knight.input(event);
         }
 
@@ -81,6 +80,7 @@ int main()
         view.setCenter(Knight.getPosition().x, view.getCenter().y);
 
         window.setView(view);
+
         window.clear(sf::Color::Black);
 
         window.draw(background2);

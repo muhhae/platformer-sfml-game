@@ -83,7 +83,7 @@ void Character::input(sf::Event event)
 void Character::update()
 {
     frame++;
-    if (frame > 59) frame = 0;
+    if (frame > 99) frame = 0;
 
     if (!isGrounded) isJump -= 0.1;
     else isJump = 0;
