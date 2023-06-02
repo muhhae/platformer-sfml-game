@@ -9,7 +9,7 @@ class Character : public sf::Drawable
         std::string name;
 
         sf::Vector2i origin;
-        sf::Vector2f scale = sf::Vector2f(3,3);
+        sf::Vector2f scale = sf::Vector2f(4,4);
 
         sf::Sprite sprite;
 
@@ -29,6 +29,9 @@ class Character : public sf::Drawable
     public :
         Character();
         Character(std::string name, sf::Vector2i origin);
+
+        // void setPosition(sf::Vector2f position);
+
         void load(std::string dir = "Sprite",std::string CharacterName = "Knight", std::string extension = "gif");
         void switchState(std::string state);
         void update();

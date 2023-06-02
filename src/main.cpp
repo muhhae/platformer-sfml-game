@@ -17,27 +17,20 @@ int main()
     bg.loadFromFile("Sprite/BG/bg.gif");
 
     sf::Sprite background;
-    sf::Sprite background2;
 
+    bg.setRepeated(true);
     background.setTexture(bg);
-    background.setTextureRect(sf::IntRect(0, 200, 1920, 1080));
-    background.setOrigin(bg.getSize().x/2, bg.getSize().y/2);
-
-    background2.setTexture(bg);
-    background2.setTextureRect(sf::IntRect(0, 200, 1920, 1080));
-    background2.setOrigin(bg.getSize().x/2, bg.getSize().y/2);
+    background.setTextureRect(sf::IntRect(0, 0, 10000, 2160));
+    background.setOrigin(bg.getSize().x, background.getTextureRect().height);
 
     Character Knight("Knight", sf::Vector2i(55,80));
     Knight.load();
 
     view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
-    view.setSize(window.getSize().x/2, window.getSize().y/2);
+    view.setSize(window.getSize().x, window.getSize().y);
 
     background.setPosition(sf::Vector2f(view.getCenter()));
-    background.move(0, 240);
-
-    background2.setPosition(background.getPosition());
-    background2.move(bg.getSize().x, 0);
+    background.move(0, 580);
 
     box.setPosition(background.getPosition());
     box.move(0, -580);
@@ -83,10 +76,10 @@ int main()
 
         window.clear(sf::Color::Black);
 
-        window.draw(background2);
         window.draw(background);
-        window.draw(box);
+        // window.draw(box);
         window.draw(Knight);
+        std::cout<<Knight.getPosition().y<<std::endl;
         window.display();
     }
 

@@ -85,17 +85,17 @@ void Character::update()
     frame++;
     if (frame > 99) frame = 0;
 
+    if (sprite.getPosition().y >= 200 && isJump < 0) 
+    {
+        switchState("Idle");
+        isGrounded = true;
+    }
+
     if (!isGrounded) isJump -= 0.1;
     else isJump = 0;
 
     if (isJump > 0) switchState("Jump");
     else if (isJump < 0) switchState("Fall");
-
-    if (sprite.getPosition().y > 190 && isJump < 0) 
-    {
-        switchState("Idle");
-        isGrounded = true;
-    }
 
     if (isMove)
     {

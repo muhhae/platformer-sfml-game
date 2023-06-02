@@ -25,6 +25,8 @@ void TextureManager::load(std::string state, std::string dir,std::string Charact
 }
 sf::Texture& TextureManager::get(int frame, int maxFrame)
 {
+    // std::cout<<frame<<" = "<<frame << " / " << maxFrame << " / " <<texture.size()<<std::endl;
     frame = frame / (maxFrame/texture.size());
+    // std::cout<<"frame : "<<frame<<std::endl;
     return texture.at(frame);
 }
