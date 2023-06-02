@@ -1,1 +1,2 @@
-obj/main.o: src/main.cpp src/lib/lib.hpp src/lib/ImageStorage.hpp
+obj/main.o: src/main.cpp src/lib/lib.hpp src/lib/Character.hpp \
+ src/lib/TextureManager.hpp
