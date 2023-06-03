@@ -11,19 +11,22 @@ Character::Character(std::string name, sf::Vector2i origin)
     this->origin = origin;
     sprite.setOrigin(origin.x, origin.y);
     sprite.setScale(scale.x, scale.y);
+    hitbox.setSize(sf::Vector2f(100, 150));
+    hitbox.setOrigin(hitbox.getSize().x/2, hitbox.getSize().y);
 }
 
 void Character::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+    target.draw(hitbox, states);
     target.draw(sprite, states);
 }
 
-void Character::load(std::string dir ,std::string CharacterName , std::string extension )
+void Character::load(std::string dir, std::string extension )
 {
-    run.load("Run" ,dir, CharacterName, extension);
-    idle.load("Idle" ,dir, CharacterName, extension);
-    jump.load("Jump" ,dir, CharacterName, extension);
-    fall.load("Fall" ,dir, CharacterName, extension);
+    run.load("Run" ,dir, name, extension);
+    idle.load("Idle" ,dir, name, extension);
+    jump.load("Jump" ,dir, name, extension);
+    fall.load("Fall" ,dir, name, extension);
 }
 
 void Character::switchState(std::string state)
@@ -37,43 +40,78 @@ void Character::switchState(std::string state)
 
 void Character::animUpdate()
 {
-    if (currentState == "Run") sprite.setTexture(run.get(frame));
-    else if (currentState == "Idle") sprite.setTexture(idle.get(frame));
-    else if (currentState == "Jump") sprite.setTexture(jump.get(frame));
-    else if (currentState == "Fall") sprite.setTexture(fall.get(frame));
+    if (currentState == "Run") sprite.setTexture(*run.get(frame));
+    else if (currentState == "Idle") sprite.setTexture(*idle.get(frame));
+    else if (currentState == "Jump") sprite.setTexture(*jump.get(frame));
+    else if (currentState == "Fall") sprite.setTexture(*fall.get(frame));
 }
 
-void Character::input(sf::Event event)
+void Character::input(sf::Event event, int controlType)
 {
-    if (event.type == sf::Event::KeyPressed)
+    if (controlType == 0 || controlType == 2)
     {
-        if ((event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W) && isGrounded)
+        if (event.type == sf::Event::KeyPressed)
         {
-            isJump = 5;
-            isGrounded = false;
+            if ((event.key.code == sf::Keyboard::Up ) && isGrounded)
+            {
+                isJump = 5;
+                isGrounded = false;
+            }
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
+        {
+            if (!isMove)
+            {
+                isMove = true;
+            }
+            
+            isKanan = true;
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        {
+            if (!isMove)
+            {
+                isMove = true;
+            }
+            isKanan = false;
+        }
+        else 
+        {
+            isMove = false;
         }
     }
     
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
+    if (controlType == 1 || controlType == 2)
     {
-        if (!isMove)
+        if (event.type == sf::Event::KeyPressed)
         {
-            isMove = true;
+            if ((event.key.code == sf::Keyboard::W) && isGrounded)
+            {
+                isJump = 5;
+                isGrounded = false;
+            }
         }
-        
-        isKanan = true;
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-    {
-        if (!isMove)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) 
         {
-            isMove = true;
+            if (!isMove)
+            {
+                isMove = true;
+            }
+            
+            isKanan = true;
         }
-        isKanan = false;
-    }
-    else 
-    {
-        isMove = false;
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
+            if (!isMove)
+            {
+                isMove = true;
+            }
+            isKanan = false;
+        }
+        else 
+        {
+            isMove = false;
+        }
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) sprite.rotate(1);
@@ -101,12 +139,12 @@ void Character::update()
     {
         if (isKanan)
         {
-            sprite.move(2, 0);
+            sprite.move(4, 0);
             sprite.setScale(scale.x, scale.y);
         }   
         else 
         {
-            sprite.move(-2, 0);
+            sprite.move(-4, 0);
             sprite.setScale(-1 * scale.x, scale.y);
         }
 
@@ -117,7 +155,7 @@ void Character::update()
     }
     else if(isGrounded) switchState("Idle");
     
-
+    hitbox.setPosition(getPosition());
     sprite.move(0, -1 * isJump);
     animUpdate();
 }

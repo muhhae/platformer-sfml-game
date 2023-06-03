@@ -12,6 +12,7 @@ class Character : public sf::Drawable
         sf::Vector2f scale = sf::Vector2f(4,4);
 
         sf::Sprite sprite;
+        sf::RectangleShape hitbox;
 
         TextureManager run;
         TextureManager idle;
@@ -32,11 +33,11 @@ class Character : public sf::Drawable
 
         // void setPosition(sf::Vector2f position);
 
-        void load(std::string dir = "Sprite",std::string CharacterName = "Knight", std::string extension = "gif");
+        void load(std::string dir = "Sprite", std::string extension = "gif");
         void switchState(std::string state);
         void update();
         void animUpdate();
-        void input(sf::Event event);
+        void input(sf::Event event, int);
 
         sf::Vector2f getPosition(){return sprite.getPosition();}
 

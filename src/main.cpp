@@ -26,6 +26,12 @@ int main()
     Character Knight("Knight", sf::Vector2i(55,80));
     Knight.load();
 
+    sf::Image acuan;
+    acuan.loadFromFile("Sprite/Mage/Idle/0.gif");
+
+    Character Mage("Mage", sf::Vector2i(acuan.getSize().x/2, acuan.getSize().y * 0.67));
+    Mage.load();
+
     view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
     view.setSize(window.getSize().x, window.getSize().y);
 
@@ -56,7 +62,7 @@ int main()
                     else window.create(sf::VideoMode(1024, 728), "My Game", sf::Style::Default);
                     full = 1 - full;
                     window.setFramerateLimit(100);
-                    view.setSize(window.getSize().x/2, window.getSize().y/2);
+                    view.setSize(window.getSize().x, window.getSize().y);
                 }
             }
 
@@ -65,10 +71,12 @@ int main()
                 view.setSize(event.size.width/2, event.size.height/2);
             }
 
-            Knight.input(event);
+            Knight.input(event, 0);
+            Mage.input(event, 1);
         }
 
         Knight.update();
+        Mage.update();
 
         view.setCenter(Knight.getPosition().x, view.getCenter().y);
 
@@ -78,8 +86,9 @@ int main()
 
         window.draw(background);
         // window.draw(box);
+        
+        window.draw(Mage);
         window.draw(Knight);
-        std::cout<<Knight.getPosition().y<<std::endl;
         window.display();
     }
 
