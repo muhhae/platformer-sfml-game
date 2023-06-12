@@ -40,10 +40,10 @@ void Character::switchState(std::string state)
 
 void Character::animUpdate()
 {
-    if (currentState == "Run") sprite.setTexture(*run.get(frame));
-    else if (currentState == "Idle") sprite.setTexture(*idle.get(frame));
-    else if (currentState == "Jump") sprite.setTexture(*jump.get(frame));
-    else if (currentState == "Fall") sprite.setTexture(*fall.get(frame));
+    if (currentState == "Run") sprite.setTexture(run.get(frame));
+    else if (currentState == "Idle") sprite.setTexture(idle.get(frame));
+    else if (currentState == "Jump") sprite.setTexture(jump.get(frame));
+    else if (currentState == "Fall") sprite.setTexture(fall.get(frame));
 }
 
 void Character::input(sf::Event event, int controlType)
@@ -120,8 +120,12 @@ void Character::input(sf::Event event, int controlType)
 
 void Character::update()
 {
+    std::cout<<"Update Start"<<std::endl;
+
     frame++;
     if (frame > 99) frame = 0;
+    
+    std::cout<<"after Frame"<<std::endl;
 
     if (sprite.getPosition().y >= 200 && isJump < 0) 
     {
@@ -129,11 +133,17 @@ void Character::update()
         isGrounded = true;
     }
 
+    std::cout<<"Before Grounded"<<std::endl;
+
     if (!isGrounded) isJump -= 0.1;
     else isJump = 0;
 
+    std::cout<<"After Grounded"<<std::endl;
+
     if (isJump > 0) switchState("Jump");
     else if (isJump < 0) switchState("Fall");
+
+    std::cout<<"After Jump"<<std::endl;
 
     if (isMove)
     {
@@ -154,9 +164,14 @@ void Character::update()
         }
     }
     else if(isGrounded) switchState("Idle");
-    
+
+    std::cout<<"After Else"<<std::endl;
+
     hitbox.setPosition(getPosition());
     sprite.move(0, -1 * isJump);
+
+    std::cout<<"Before anim"<<std::endl;
+
     animUpdate();
 }
 

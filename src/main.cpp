@@ -76,13 +76,13 @@ int main()
         }
 
         Knight.update();
-        Mage.update();
+        // Mage.update();
 
         view.setCenter(Knight.getPosition().x, view.getCenter().y);
 
         window.setView(view);
 
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color::White);
 
         window.draw(background);
         // window.draw(box);
