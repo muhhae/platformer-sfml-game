@@ -18,13 +18,13 @@ void TextureManager::load(std::string state, std::string dir,std::string Charact
     while (std::filesystem::exists(dir+"/"+ CharacterName + "/" + state + "/" + std::to_string(i) + "." + extension))
     {
         std::cout<<(dir+"/"+ CharacterName + "/" + state + "/" + std::to_string(i) + "." + extension)<<" Found"<<std::endl;
-        texture.push_back(new sf::Texture());
-        texture.at(i)->loadFromFile(dir+"/"+ CharacterName + "/" + state + "/" + std::to_string(i) + "." + extension);
+        texture.push_back(sf::Texture());
+        texture.at(i).loadFromFile(dir+"/"+ CharacterName + "/" + state + "/" + std::to_string(i) + "." + extension);
         i++;
     }
     std::cout<<(dir+"/"+ CharacterName + "/" + state + "/" + std::to_string(i) + "." + extension)<<" Not Found"<<std::endl;
 }
-sf::Texture* TextureManager::get(int frame, int maxFrame)
+sf::Texture& TextureManager::get(int frame, int maxFrame)
 {
     // std::cout<<frame<<" = "<<frame << " / " << maxFrame << " / " <<texture.size()<<std::endl;
     frame = frame / (maxFrame/texture.size());

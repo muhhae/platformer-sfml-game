@@ -40,10 +40,10 @@ void Character::switchState(std::string state)
 
 void Character::animUpdate()
 {
-    if (currentState == "Run") sprite.setTexture(*run.get(frame));
-    else if (currentState == "Idle") sprite.setTexture(*idle.get(frame));
-    else if (currentState == "Jump") sprite.setTexture(*jump.get(frame));
-    else if (currentState == "Fall") sprite.setTexture(*fall.get(frame));
+    if (currentState == "Run") sprite.setTexture(run.get(frame));
+    else if (currentState == "Idle") sprite.setTexture(idle.get(frame));
+    else if (currentState == "Jump") sprite.setTexture(jump.get(frame));
+    else if (currentState == "Fall") sprite.setTexture(fall.get(frame));
 }
 
 void Character::input(sf::Event event, int controlType)
