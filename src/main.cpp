@@ -31,6 +31,7 @@ int main()
 
     Character Mage("Mage", sf::Vector2i(acuan.getSize().x/2, acuan.getSize().y * 0.67));
     Mage.load();
+    Mage.setPosition(Knight.getPosition() + sf::Vector2f(200, 0));
 
     view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
     view.setSize(window.getSize().x, window.getSize().y);
@@ -77,6 +78,9 @@ int main()
 
         Knight.update();
         Mage.update();
+
+        Knight.collision(&Mage);
+        Mage.collision(&Knight);
 
         view.setCenter(Knight.getPosition().x, view.getCenter().y);
 

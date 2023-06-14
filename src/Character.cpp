@@ -12,12 +12,13 @@ Character::Character(std::string name, sf::Vector2i origin)
     sprite.setOrigin(origin.x, origin.y);
     sprite.setScale(scale.x, scale.y);
     hitbox.setSize(sf::Vector2f(100, 150));
+    setSize(150, 100);
     hitbox.setOrigin(hitbox.getSize().x/2, hitbox.getSize().y);
 }
 
 void Character::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    target.draw(hitbox, states);
+    // target.draw(hitbox, states);
     target.draw(sprite, states);
 }
 
@@ -54,7 +55,7 @@ void Character::input(sf::Event event, int controlType)
         {
             if ((event.key.code == sf::Keyboard::Up ) && isGrounded)
             {
-                isJump = 5;
+                isJump = 10;
                 isGrounded = false;
             }
         }
@@ -87,7 +88,7 @@ void Character::input(sf::Event event, int controlType)
         {
             if ((event.key.code == sf::Keyboard::W) && isGrounded)
             {
-                isJump = 5;
+                isJump = 10;
                 isGrounded = false;
             }
         }
@@ -116,6 +117,11 @@ void Character::input(sf::Event event, int controlType)
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) sprite.rotate(1);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) sprite.rotate(-1);
+}
+
+void Character::collision(collider::BoxCollider* other)
+{
+    sprite.move(vectorCollision(other));
 }
 
 void Character::update()
@@ -158,5 +164,6 @@ void Character::update()
     hitbox.setPosition(getPosition());
     sprite.move(0, -1 * isJump);
     animUpdate();
+    updatePos(getPosition());
 }
 

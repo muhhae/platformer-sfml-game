@@ -2,8 +2,9 @@
 
 #include "lib.hpp"
 #include "TextureManager.hpp"
+#include "Collider.hpp"
 
-class Character : public sf::Drawable
+class Character : public sf::Drawable, public collider::BoxCollider
 {
     private :
         std::string name;
@@ -37,9 +38,12 @@ class Character : public sf::Drawable
         void switchState(std::string state);
         void update();
         void animUpdate();
+
+        void collision(collider::BoxCollider * other);
         void input(sf::Event event, int);
 
-        sf::Vector2f getPosition(){return sprite.getPosition();}
+        sf::Vector2f getPosition() { return sprite.getPosition(); }
+        void setPosition(sf::Vector2f pos) {sprite.setPosition(pos);}
 
-        virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 };
