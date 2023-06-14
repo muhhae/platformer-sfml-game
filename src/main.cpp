@@ -10,7 +10,7 @@ int main()
     bool full = true;
     window.setFramerateLimit(100);
 
-    sf::RectangleShape box(sf::Vector2f(10000, 1080));
+    sf::RectangleShape box(sf::Vector2f(3000, 300));
     box.setOrigin(box.getSize().x/2, box.getSize().y/2);
 
     sf::Texture bg;
@@ -32,6 +32,7 @@ int main()
     Character Mage("Mage", sf::Vector2i(acuan.getSize().x/2, acuan.getSize().y * 0.67));
     Mage.load();
     Mage.setPosition(Knight.getPosition() + sf::Vector2f(200, 0));
+    Mage.setWeight(2);
 
     view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
     view.setSize(window.getSize().x, window.getSize().y);
@@ -39,8 +40,12 @@ int main()
     background.setPosition(sf::Vector2f(view.getCenter()));
     background.move(0, 580);
 
-    box.setPosition(background.getPosition());
+    box.setPosition(background.getPosition() + sf::Vector2f(0, 350));
     box.move(0, -580);
+
+    // collider::BoxCollider boxCol(box.getSize().y, box.getSize().x);
+    // boxCol.updatePos(box.getPosition());
+    // boxCol.setWeight(100);
 
     sf::Color col;
     col.a = 150;
@@ -82,20 +87,22 @@ int main()
         Knight.collision(&Mage);
         Mage.collision(&Knight);
 
+        // Knight.collision(&boxCol);
+        // Mage.collision(&boxCol);
+
         view.setCenter(Knight.getPosition().x, view.getCenter().y);
 
         window.setView(view);
 
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color::White);
 
         window.draw(background);
-        // window.draw(box);
+        window.draw(box);
         
         window.draw(Mage);
         window.draw(Knight);
+
         window.display();
     }
-
-
     return 0;
 }

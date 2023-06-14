@@ -2,11 +2,6 @@
 
 namespace collider
 {
-    BoxCollider::BoxCollider()
-    {
-
-    }
-
     BoxCollider::BoxCollider(float height, float width)
     {
         this->height = height;
@@ -24,6 +19,11 @@ namespace collider
     {
         this->height = height;
         this->width = width;
+    }
+
+    void BoxCollider::setWeight(float weight)
+    {
+        this->weight = weight;
     }
 
     sf::Vector2f BoxCollider::vectorCollision(BoxCollider *other)
@@ -68,6 +68,8 @@ namespace collider
 
         if (abs(result.x) > abs(result.y)) result.x *= 0;
         else result.y *= 0;
+
+        result *= other->weight / (weight + other->getWeight());
 
         return result;
     }

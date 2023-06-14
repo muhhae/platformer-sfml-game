@@ -10,6 +10,8 @@ namespace collider
             float width;
             float height;
 
+            float weight = 1;
+
             struct bound
             {
                 float top, left, right, bot;
@@ -17,11 +19,12 @@ namespace collider
             bound m_bound;
         public :
             bound getBound(){return m_bound;}
-            BoxCollider();
+            float getWeight(){return weight;}
 
             void updatePos(sf::Vector2f position);
             void setSize(float height, float width);
-            BoxCollider(float height, float width);
+            void setWeight(float weight = 1);
+            BoxCollider(float height = 150, float width = 100);
             
 
             sf::Vector2f vectorCollision(BoxCollider *other);  
