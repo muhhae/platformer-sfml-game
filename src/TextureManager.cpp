@@ -9,7 +9,7 @@ TextureManager::TextureManager()
 
 TextureManager::TextureManager(std::string state, std::string dir,std::string CharacterName, std::string extension)
 {
-    load(state, dir, extension);
+    load(state, dir, CharacterName ,extension);
 }
 
 void TextureManager::load(std::string state, std::string dir,std::string CharacterName, std::string extension)
