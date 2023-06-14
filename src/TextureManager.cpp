@@ -14,15 +14,16 @@ TextureManager::TextureManager(std::string state, std::string dir,std::string Ch
 
 void TextureManager::load(std::string state, std::string dir,std::string CharacterName, std::string extension)
 {
-    std::list<sf::Texture>::iterator it = texture.begin();
+    std::list<sf::Texture*>::iterator it = texture.begin();
 
     int i = 0;
 
     while (std::filesystem::exists(dir+"/"+ CharacterName + "/" + state + "/" + std::to_string(i) + "." + extension))
     {
+        sf::Texture* txt = new sf::Texture(); 
         std::cout<<(dir+"/"+ CharacterName + "/" + state + "/" + std::to_string(i) + "." + extension)<<" Found"<<std::endl;
-        texture.push_back(sf::Texture());
-        (*it).loadFromFile(dir+"/"+ CharacterName + "/" + state + "/" + std::to_string(i) + "." + extension);
+        texture.push_back(txt);
+        txt->loadFromFile(dir+"/"+ CharacterName + "/" + state + "/" + std::to_string(i) + "." + extension);
         i++;
         std::advance(it, 1);
     }
@@ -32,7 +33,7 @@ sf::Texture& TextureManager::get(int frame, int maxFrame)
 {
     std::cout<<"Masuk get"<<std::endl;
     // std::cout<<frame<<" = "<<frame << " / " << maxFrame << " / " <<texture.size()<<std::endl;
-    std::list<sf::Texture>::iterator it = texture.begin();
+    std::list<sf::Texture*>::iterator it = texture.begin();
 
     frame = frame / (maxFrame/texture.size());
     if (frame >= texture.size()) frame = texture.size() - 1;
@@ -43,5 +44,5 @@ sf::Texture& TextureManager::get(int frame, int maxFrame)
 
     std::cout<<"Advance"<<std::endl;
     // std::cout<<"frame : "<<frame<<std::endl;
-    return (*it);
+    return *(*it);
 }

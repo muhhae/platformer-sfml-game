@@ -7,7 +7,7 @@ class TextureManager
     private:
         std::string state;
         std::string CharacterName;
-        std::list<sf::Texture> texture;
+        std::list<sf::Texture*> texture;
         
     public:
         TextureManager();

@@ -23,16 +23,16 @@ int main()
     background.setTextureRect(sf::IntRect(0, 0, 10000, 2160));
     background.setOrigin(bg.getSize().x, background.getTextureRect().height);
 
-    Character Knight("Knight", sf::Vector2i(55,80));
-    Knight.load();
+    Character* Knight = new Character("Knight", sf::Vector2i(55,80));
+    Knight->load();
 
     sf::Image acuan;
     acuan.loadFromFile("Sprite/Mage/Idle/0.gif");
 
-    Character Mage("Mage", sf::Vector2i(acuan.getSize().x/2, acuan.getSize().y * 0.67));
-    Mage.load();
+    Character* Mage = new Character("Mage", sf::Vector2i(acuan.getSize().x/2, acuan.getSize().y * 0.67));
+    Mage->load();
 
-    view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
+    view.setCenter(Knight->getPosition().x, Knight->getPosition().y);
     view.setSize(window.getSize().x, window.getSize().y);
 
     background.setPosition(sf::Vector2f(view.getCenter()));
@@ -71,14 +71,14 @@ int main()
                 view.setSize(event.size.width/2, event.size.height/2);
             }
 
-            Knight.input(event, 0);
-            Mage.input(event, 1);
+            Knight->input(event, 0);
+            Mage->input(event, 1);
         }
 
-        Knight.update();
-        // Mage.update();
+        Knight->update();
+        Mage->update();
 
-        view.setCenter(Knight.getPosition().x, view.getCenter().y);
+        view.setCenter(Knight->getPosition().x, view.getCenter().y);
 
         window.setView(view);
 
@@ -87,8 +87,8 @@ int main()
         window.draw(background);
         // window.draw(box);
         
-        window.draw(Mage);
-        window.draw(Knight);
+        window.draw(*Mage);
+        window.draw(*Knight);
         window.display();
     }
 
