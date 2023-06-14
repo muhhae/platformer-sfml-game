@@ -40,12 +40,11 @@ int main()
     background.setPosition(sf::Vector2f(view.getCenter()));
     background.move(0, 580);
 
-    box.setPosition(background.getPosition() + sf::Vector2f(0, 350));
-    box.move(0, -580);
+    box.setPosition(background.getPosition() + sf::Vector2f(0, -100));
 
-    // collider::BoxCollider boxCol(box.getSize().y, box.getSize().x);
-    // boxCol.updatePos(box.getPosition());
-    // boxCol.setWeight(100);
+    collider::BoxCollider boxCol(box.getSize().y, box.getSize().x);
+    boxCol.updatePos(box.getPosition());
+    boxCol.setWeight();
 
     sf::Color col;
     col.a = 150;
@@ -87,8 +86,8 @@ int main()
         Knight.collision(&Mage);
         Mage.collision(&Knight);
 
-        // Knight.collision(&boxCol);
-        // Mage.collision(&boxCol);
+        Knight.collision(&boxCol);
+        Mage.collision(&boxCol);
 
         view.setCenter(Knight.getPosition().x, view.getCenter().y);
 

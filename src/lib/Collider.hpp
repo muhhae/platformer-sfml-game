@@ -24,6 +24,7 @@ namespace collider
             void updatePos(sf::Vector2f position);
             void setSize(float height, float width);
             void setWeight(float weight = 1);
+            
             BoxCollider(float height = 150, float width = 100);
             
 
