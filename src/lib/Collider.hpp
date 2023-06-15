@@ -20,6 +20,9 @@ namespace collider
             sf::RectangleShape box;
 
             bound m_bound;
+            bool kinematic = true;
+
+
         public :
             bound getBound(){return m_bound;}
             float getWeight(){return weight;}
@@ -28,10 +31,14 @@ namespace collider
             void setSize(float height, float width);
             void setWeight(float weight = 1);
             void colDraw(sf::RenderTarget& target) const;
+
+            void debug(bool showOutline = true);
+            void setType(bool kinematic);
+            bool getType(){return kinematic;}
             
             BoxCollider(float height = 150, float width = 100);
             
-
+            virtual void collision(collider::BoxCollider* other){};
             sf::Vector2f vectorCollision(BoxCollider *other);  
     };
 }

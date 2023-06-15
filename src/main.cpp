@@ -1,6 +1,7 @@
 #include "lib/lib.hpp"
 #include "lib/Character.hpp"
 
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode().getDesktopMode(), "My Game", sf::Style::Fullscreen);
@@ -18,7 +19,7 @@ int main()
     bg.setRepeated(true);
     background.setTexture(bg);
     background.setTextureRect(sf::IntRect(0, 0, 10000, 2160));
-    background.setOrigin(bg.getSize().x, background.getTextureRect().height);
+    background.setOrigin(bg.getSize().x, background.getTextureRect().height/2);
 
     Character Knight("Knight", sf::Vector2i(55,61));
     Knight.load();
@@ -41,6 +42,23 @@ int main()
     collider::BoxCollider boxCol(300, 3000);
     boxCol.updatePos(background.getPosition() + sf::Vector2f(0, -228));
     boxCol.setWeight(100000);
+
+    collider::BoxCollider block(200, 200);
+    block.updatePos(background.getPosition() + sf::Vector2f(400, -528));
+    block.debug();
+
+    Mage.debug(true);
+    boxCol.debug();
+
+    std::vector<collider::BoxCollider*> col;
+
+    col.push_back(&Mage);
+    col.push_back(&Knight);
+    col.push_back(&boxCol);
+    col.push_back(&block);
+
+    Mage.setType(0);    
+    Knight.setType(0);
 
     while (window.isOpen())
     {
@@ -72,11 +90,23 @@ int main()
         Knight.input(0);
         Mage.input(1);
 
-        Knight.collision(&Mage);
-        Mage.collision(&Knight);
+        // Knight.collision(&Mage);
+        // Mage.collision(&Knight);
 
-        Knight.collision(&boxCol);
-        Mage.collision(&boxCol);
+        // Knight.collision(&boxCol);
+        // Mage.collision(&boxCol);
+
+        for (int i = 0; i < col.size(); i++)
+        {
+            if (col.at(i)->getType() == true) continue;
+
+            for (int j = 0; j < col.size(); j++)
+            {
+                if (i == j) continue;
+
+                col.at(i)->collision(col.at(j));
+            }
+        }
 
         Knight.update();
         Mage.update();
@@ -93,6 +123,7 @@ int main()
         window.draw(Knight);
 
         boxCol.colDraw(window);
+        block.colDraw(window);
 
         window.display();
     }

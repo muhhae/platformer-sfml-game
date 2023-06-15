@@ -16,7 +16,16 @@ namespace collider
         box.setOrigin(width/2, height/2);
         box.setFillColor(sf::Color(0));
         box.setOutlineColor(sf::Color().Black);
-        box.setOutlineThickness(3);
+    }
+
+    void BoxCollider::debug(bool showOutline)
+    {
+        box.setOutlineThickness(3 * showOutline);
+    }
+
+    void BoxCollider::setType(bool kinematic)
+    {
+        this->kinematic = kinematic;
     }
 
     void BoxCollider::updatePos(sf::Vector2f position)
