@@ -10,9 +10,6 @@ int main()
     bool full = true;
     window.setFramerateLimit(100);
 
-    sf::RectangleShape box(sf::Vector2f(3000, 300));
-    box.setOrigin(box.getSize().x/2, box.getSize().y/2);
-
     sf::Texture bg;
     bg.loadFromFile("Sprite/BG/bg.gif");
 
@@ -23,16 +20,17 @@ int main()
     background.setTextureRect(sf::IntRect(0, 0, 10000, 2160));
     background.setOrigin(bg.getSize().x, background.getTextureRect().height);
 
-    Character Knight("Knight", sf::Vector2i(55,80));
+    Character Knight("Knight", sf::Vector2i(55,61));
     Knight.load();
 
     sf::Image acuan;
     acuan.loadFromFile("Sprite/Mage/Idle/0.gif");
 
-    Character Mage("Mage", sf::Vector2i(acuan.getSize().x/2, acuan.getSize().y * 0.67));
+    Character Mage("Mage", sf::Vector2i(acuan.getSize().x/2, acuan.getSize().y* 0.57));
     Mage.load();
     Mage.setPosition(Knight.getPosition() + sf::Vector2f(200, 0));
     Mage.setWeight(2);
+    Mage.setSize(200, 100);
 
     view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
     view.setSize(window.getSize().x, window.getSize().y);
@@ -40,16 +38,9 @@ int main()
     background.setPosition(sf::Vector2f(view.getCenter()));
     background.move(0, 580);
 
-    box.setPosition(background.getPosition() + sf::Vector2f(0, -100));
-
-    collider::BoxCollider boxCol(box.getSize().y, box.getSize().x);
-    boxCol.updatePos(box.getPosition());
-    boxCol.setWeight();
-
-    sf::Color col;
-    col.a = 150;
-
-    box.setFillColor(col);
+    collider::BoxCollider boxCol(300, 3000);
+    boxCol.updatePos(background.getPosition() + sf::Vector2f(0, -228));
+    boxCol.setWeight(100000);
 
     while (window.isOpen())
     {
@@ -76,18 +67,19 @@ int main()
                 view.setSize(event.size.width/2, event.size.height/2);
             }
 
-            Knight.input(event, 0);
-            Mage.input(event, 1);
+            
         }
-
-        Knight.update();
-        Mage.update();
+        Knight.input(0);
+        Mage.input(1);
 
         Knight.collision(&Mage);
         Mage.collision(&Knight);
 
         Knight.collision(&boxCol);
         Mage.collision(&boxCol);
+
+        Knight.update();
+        Mage.update();
 
         view.setCenter(Knight.getPosition().x, view.getCenter().y);
 
@@ -96,10 +88,11 @@ int main()
         window.clear(sf::Color::White);
 
         window.draw(background);
-        window.draw(box);
         
         window.draw(Mage);
         window.draw(Knight);
+
+        boxCol.colDraw(window);
 
         window.display();
     }

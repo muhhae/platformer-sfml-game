@@ -2,14 +2,27 @@
 
 namespace collider
 {
+    void BoxCollider::colDraw(sf::RenderTarget& target) const
+    {
+        target.draw(box);
+    }
+
     BoxCollider::BoxCollider(float height, float width)
     {
         this->height = height;
-        this->width = width;
+        this->width = width;    
+
+        box.setSize(sf::Vector2f(width, height));
+        box.setOrigin(width/2, height/2);
+        box.setFillColor(sf::Color(0));
+        box.setOutlineColor(sf::Color().Black);
+        box.setOutlineThickness(3);
     }
 
     void BoxCollider::updatePos(sf::Vector2f position)
     {
+        box.setPosition(position);
+
         m_bound.top = position.y - height/2; 
         m_bound.bot = position.y + height/2;
         m_bound.left = position.x - width/2;
@@ -19,6 +32,9 @@ namespace collider
     {
         this->height = height;
         this->width = width;
+
+        box.setSize(sf::Vector2f(width, height));
+        box.setOrigin(width/2, height/2);
     }
 
     void BoxCollider::setWeight(float weight)
@@ -64,7 +80,7 @@ namespace collider
             }
         }
 
-        std::cout<<"x : "<<result.x<<" y : "<<result.y<<std::endl;
+        // std::cout<<"x : "<<result.x<<" y : "<<result.y<<std::endl;
 
         if (abs(result.x) > abs(result.y)) result.x *= 0;
         else result.y *= 0;

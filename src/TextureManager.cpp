@@ -2,6 +2,14 @@
 
 #include "lib/TextureManager.hpp"
 
+TextureManager::~TextureManager()
+{
+    for (const auto& ptr : texture)
+    {
+        delete ptr;
+    }
+}
+
 TextureManager::TextureManager()
 {
 

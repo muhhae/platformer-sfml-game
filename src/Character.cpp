@@ -11,15 +11,14 @@ Character::Character(std::string name, sf::Vector2i origin)
     this->origin = origin;
     sprite.setOrigin(origin.x, origin.y);
     sprite.setScale(scale.x, scale.y);
-    hitbox.setSize(sf::Vector2f(100, 150));
     setSize(150, 100);
-    hitbox.setOrigin(hitbox.getSize().x/2, hitbox.getSize().y);
+    doJump = false;
 }
 
 void Character::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    // target.draw(hitbox, states);
     target.draw(sprite, states);
+    colDraw(target);
 }
 
 void Character::load(std::string dir, std::string extension )
@@ -47,16 +46,16 @@ void Character::animUpdate()
     else if (currentState == "Fall") sprite.setTexture(fall.get(frame));
 }
 
-void Character::input(sf::Event event, int controlType)
+void Character::input(int controlType)
 {
     if (controlType == 0 || controlType == 2)
     {
-        if (event.type == sf::Event::KeyPressed)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) 
         {
-            if ((event.key.code == sf::Keyboard::Up ) && isGrounded)
+            if (isGrounded)
             {
-                isJump = 10;
-                isGrounded = false;
+                isJump = 7;
+                doJump = true;
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
@@ -84,12 +83,12 @@ void Character::input(sf::Event event, int controlType)
     
     if (controlType == 1 || controlType == 2)
     {
-        if (event.type == sf::Event::KeyPressed)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) 
         {
-            if ((event.key.code == sf::Keyboard::W) && isGrounded)
+            if (isGrounded)
             {
-                isJump = 10;
-                isGrounded = false;
+                isJump = 7;
+                doJump = true;
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) 
@@ -117,29 +116,46 @@ void Character::input(sf::Event event, int controlType)
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) sprite.rotate(1);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) sprite.rotate(-1);
+
+    isGrounded = false;
+    colMove.clear();
 }
 
 void Character::collision(collider::BoxCollider* other)
 {
-    sprite.move(vectorCollision(other));
+    sf::Vector2f move = vectorCollision(other);
+
+    if (!isGrounded)
+    {
+        if (move.y < 0) isGrounded = true;
+        else isGrounded = false;
+    }
+
+    // std::cout<<"move .y : "<<move.y<<std::endl;
+    if (move.y > 0 && isGrounded) return;
+    colMove.push_back(move);
 }
 
 void Character::update()
 {
+    for (const auto& mov : colMove)
+    {
+        if (mov.y > 0 && isGrounded) continue;
+        sprite.move(mov);
+    }
     frame++;
     if (frame > 99) frame = 0;
 
-    if (sprite.getPosition().y >= 200 && isJump < 0) 
-    {
-        switchState("Idle");
-        isGrounded = true;
-    }
-
     if (!isGrounded) isJump -= 0.1;
-    else isJump = 0;
+    else if(!doJump) isJump = -0.1;
 
-    if (isJump > 0) switchState("Jump");
-    else if (isJump < 0) switchState("Fall");
+    doJump = !isGrounded;
+
+    if (!isGrounded)
+    {
+        if (isJump > 0) switchState("Jump");
+        else if (isJump < 0) switchState("Fall");
+    }
 
     if (isMove)
     {
@@ -165,5 +181,6 @@ void Character::update()
     sprite.move(0, -1 * isJump);
     animUpdate();
     updatePos(getPosition());
+    // std::cout<<name<<" : "<<currentState<<" isGrounded : "<<isGrounded<<" Jump "<<isJump<<std::endl;
 }
 

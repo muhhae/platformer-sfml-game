@@ -11,6 +11,8 @@ class Character : public sf::Drawable, public collider::BoxCollider
 
         sf::Vector2i origin;
         sf::Vector2f scale = sf::Vector2f(4,4);
+        
+        std::vector<sf::Vector2f> colMove;
 
         sf::Sprite sprite;
         sf::RectangleShape hitbox;
@@ -23,8 +25,9 @@ class Character : public sf::Drawable, public collider::BoxCollider
         std::string currentState = "Idle";
 
         int frame = 0;
+        int groundCount = 0;
 
-        bool isMove, isMoveJump, isKanan, isGrounded;
+        bool isMove, isMoveJump, isKanan, isGrounded, doJump;
 
         float isJump;
 
@@ -40,7 +43,7 @@ class Character : public sf::Drawable, public collider::BoxCollider
         void animUpdate();
 
         void collision(collider::BoxCollider * other);
-        void input(sf::Event event, int);
+        void input(int);
 
         sf::Vector2f getPosition() { return sprite.getPosition(); }
         void setPosition(sf::Vector2f pos) {sprite.setPosition(pos);}

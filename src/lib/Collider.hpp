@@ -16,6 +16,9 @@ namespace collider
             {
                 float top, left, right, bot;
             };
+
+            sf::RectangleShape box;
+
             bound m_bound;
         public :
             bound getBound(){return m_bound;}
@@ -24,6 +27,7 @@ namespace collider
             void updatePos(sf::Vector2f position);
             void setSize(float height, float width);
             void setWeight(float weight = 1);
+            void colDraw(sf::RenderTarget& target) const;
             
             BoxCollider(float height = 150, float width = 100);
             
