@@ -26,13 +26,13 @@ int main()
 
     Character Mage("Mage", sf::Vector2i(acuan.getSize().x/2, acuan.getSize().y* 0.57));
     Mage.setPosition(sf::Vector2f(200, 0));
-    Mage.setWeight(2);
-    Mage.setSize(200, 100);
+    Mage.getCollider().setWeight(2);
+    Mage.getCollider().setSize(200, 100);
 
     Character Knight("Knight", sf::Vector2i(55,61));
     Knight.setPosition(sf::Vector2f(0, 0));
-    Knight.setWeight(1);
-    Knight.setSize(150, 100);
+    Knight.getCollider().setWeight(1);
+    Knight.getCollider().setSize(150, 100);
 
     view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
     view.setSize(window.getSize().x, window.getSize().y);
@@ -40,27 +40,29 @@ int main()
     background.setPosition(sf::Vector2f(view.getCenter()));
     background.move(0, 580);
 
-    collider::BoxCollider boxCol(300, 3000);
-    boxCol.updatePos(background.getPosition() + sf::Vector2f(0, -228));
-    boxCol.setWeight(100000);
+    collider::HasCollider boxCol;
+    boxCol.getCollider().setSize(300, 3000);
+    boxCol.getCollider().updatePos(background.getPosition() + sf::Vector2f(0, -228));
+    boxCol.getCollider().setWeight(100000);
 
-    collider::BoxCollider block(200, 200);
-    block.updatePos(background.getPosition() + sf::Vector2f(400, -528));
-    block.debug();
+    collider::HasCollider block;
+    block.getCollider().setSize(200, 200);
+    block.getCollider().updatePos(background.getPosition() + sf::Vector2f(400, -528));
+    block.getCollider().debug();
 
-    Mage.debug(true);
-    Knight.debug();
-    boxCol.debug();
+    Mage.getCollider().debug(true);
+    Knight.getCollider().debug();
+    boxCol.getCollider().debug();
 
-    std::vector<collider::BoxCollider*> col;
+    std::vector<collider::HasCollider*> col;
 
     col.push_back(&Mage);
     col.push_back(&Knight);
     col.push_back(&boxCol);
     col.push_back(&block);
 
-    Mage.setType(0);    
-    Knight.setType(0);
+    Mage.getCollider().setType(0);    
+    Knight.getCollider().setType(0);
      
     Mage.load();
     Knight.load();   
@@ -97,7 +99,7 @@ int main()
 
         for (int i = 0; i < col.size(); i++)
         {
-            if (col.at(i)->getType() == true) continue;
+            if (col.at(i)->getCollider().getType() == true) continue;
 
             for (int j = 0; j < col.size(); j++)
             {
@@ -122,8 +124,8 @@ int main()
         window.draw(Mage);
         
 
-        boxCol.colDraw(window);
-        block.colDraw(window);
+        boxCol.getCollider().colDraw(window);
+        block.getCollider().colDraw(window);
 
         window.display();
     }

@@ -11,14 +11,14 @@ Character::Character(std::string name, sf::Vector2i origin)
     this->origin = origin;
     sprite.setOrigin(origin.x, origin.y);
     sprite.setScale(scale.x, scale.y);
-    setSize(150, 100);
+    col.setSize(150, 100);
     doJump = false;
 }
 
 void Character::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     target.draw(sprite, states);
-    colDraw(target);
+    col.colDraw(target);
 }
 
 void Character::load(std::string dir, std::string extension )
@@ -121,28 +121,8 @@ void Character::input(int controlType)
     colMove.clear();
 }
 
-void Character::collision(collider::BoxCollider* other)
-{
-    sf::Vector2f move = vectorCollision(other);
-
-    if (!isGrounded)
-    {
-        if (move.y < 0) isGrounded = true;
-        else isGrounded = false;
-    }
-
-    // std::cout<<"move .y : "<<move.y<<std::endl;
-    if (move.y > 0 && isGrounded) return;
-    colMove.push_back(move);
-}
-
 void Character::update()
 {
-    for (const auto& mov : colMove)
-    {
-        if (mov.y > 0 && isGrounded) continue;
-        sprite.move(mov);
-    }
     frame++;
     if (frame > 99) frame = 0;
 
@@ -177,10 +157,15 @@ void Character::update()
     }
     else if(isGrounded) switchState("Idle");
     
-    hitbox.setPosition(getPosition());
     sprite.move(0, -1 * isJump);
+
+    for (const auto& mov : colMove)
+    {
+        if (mov.y > 0 && isGrounded) continue;
+        sprite.move(mov);
+    }
+
     animUpdate();
-    updatePos(getPosition());
-    // std::cout<<name<<" : "<<currentState<<" isGrounded : "<<isGrounded<<" Jump "<<isJump<<std::endl;
+    col.updatePos(getPosition());
 }
 

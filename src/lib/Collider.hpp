@@ -37,8 +37,7 @@ namespace collider
             bool getType(){return kinematic;}
             
             BoxCollider(float height = 150, float width = 100);
-            
-            virtual void collision(collider::BoxCollider* other){};
+
             sf::Vector2f vectorCollision(BoxCollider *other);  
     };
 }

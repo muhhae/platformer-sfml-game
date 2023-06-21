@@ -3,20 +3,18 @@
 #include "lib.hpp"
 #include "TextureManager.hpp"
 #include "Collider.hpp"
+#include "HasCollider.hpp"
 
 
-class Character : public sf::Drawable, public collider::BoxCollider
+class Character : public sf::Drawable, public collider::HasCollider
 {
     private :
         std::string name;
 
         sf::Vector2i origin;
         sf::Vector2f scale = sf::Vector2f(4,4);
-        
-        std::vector<sf::Vector2f> colMove;
 
         sf::Sprite sprite;
-        sf::RectangleShape hitbox;
 
         TextureManager run;
         TextureManager idle;
@@ -28,7 +26,7 @@ class Character : public sf::Drawable, public collider::BoxCollider
         int frame = 0;
         int groundCount = 0;
 
-        bool isMove, isMoveJump, isKanan, isGrounded, doJump;
+        bool isMove, isMoveJump, isKanan, doJump;
 
         float isJump;
 
@@ -43,7 +41,6 @@ class Character : public sf::Drawable, public collider::BoxCollider
         void update();
         void animUpdate();
 
-        void collision(collider::BoxCollider * other);
         void input(int);
 
         sf::Vector2f getPosition() { return sprite.getPosition(); }
