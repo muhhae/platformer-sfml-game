@@ -3,9 +3,9 @@
 #include "lib.hpp"
 #include "TextureManager.hpp"
 #include "Collider.hpp"
-#include "DynamicObject.hpp"
 
-class Character : public sf::Drawable, public collider::BoxCollider, public DynamicObject
+
+class Character : public sf::Drawable, public collider::BoxCollider
 {
     private :
         std::string name;

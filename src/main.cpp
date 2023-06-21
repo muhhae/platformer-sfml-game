@@ -4,7 +4,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode().getDesktopMode(), "My Game", sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode().getDesktopMode(), "My Game", sf::Style::Default);
     sf::Event event;
     sf::View view;
 
@@ -90,12 +90,6 @@ int main()
         Knight.input(0);
         Mage.input(1);
 
-        // Knight.collision(&Mage);
-        // Mage.collision(&Knight);
-
-        // Knight.collision(&boxCol);
-        // Mage.collision(&boxCol);
-
         for (int i = 0; i < col.size(); i++)
         {
             if (col.at(i)->getType() == true) continue;
@@ -118,7 +112,7 @@ int main()
         window.clear(sf::Color::White);
 
         window.draw(background);
-        
+
         window.draw(Mage);
         window.draw(Knight);
 

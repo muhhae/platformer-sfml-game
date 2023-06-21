@@ -1,12 +1,12 @@
-#include "lib/GameObject.hpp"
+// #include "lib/GameObject.hpp"
 
-GameObject::GameObject()
-{
+// GameObject::GameObject()
+// {
 
-}
+// }
 
-void GameObject::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-    target.draw(sprite, states);
-}
+// void GameObject::draw(sf::RenderTarget& target, sf::RenderStates states) const
+// {
+//     target.draw(sprite, states);
+// }
 
