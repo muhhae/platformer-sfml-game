@@ -21,17 +21,18 @@ int main()
     background.setTextureRect(sf::IntRect(0, 0, 10000, 2160));
     background.setOrigin(bg.getSize().x, background.getTextureRect().height/2);
 
-    Character Knight("Knight", sf::Vector2i(55,61));
-    Knight.load();
-
     sf::Image acuan;
     acuan.loadFromFile("Sprite/Mage/Idle/0.gif");
 
     Character Mage("Mage", sf::Vector2i(acuan.getSize().x/2, acuan.getSize().y* 0.57));
-    Mage.load();
-    Mage.setPosition(Knight.getPosition() + sf::Vector2f(200, 0));
+    Mage.setPosition(sf::Vector2f(200, 0));
     Mage.setWeight(2);
     Mage.setSize(200, 100);
+
+    Character Knight("Knight", sf::Vector2i(55,61));
+    Knight.setPosition(sf::Vector2f(0, 0));
+    Knight.setWeight(1);
+    Knight.setSize(150, 100);
 
     view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
     view.setSize(window.getSize().x, window.getSize().y);
@@ -48,6 +49,7 @@ int main()
     block.debug();
 
     Mage.debug(true);
+    Knight.debug();
     boxCol.debug();
 
     std::vector<collider::BoxCollider*> col;
@@ -59,6 +61,9 @@ int main()
 
     Mage.setType(0);    
     Knight.setType(0);
+     
+    Mage.load();
+    Knight.load();   
 
     while (window.isOpen())
     {
@@ -113,8 +118,9 @@ int main()
 
         window.draw(background);
 
-        window.draw(Mage);
         window.draw(Knight);
+        window.draw(Mage);
+        
 
         boxCol.colDraw(window);
         block.colDraw(window);
