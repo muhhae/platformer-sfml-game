@@ -37,7 +37,7 @@ namespace collider
         m_bound.left = position.x - width/2;
         m_bound.right = position.x + width/2;
     }
-    void BoxCollider::setSize(float height, float width)
+    void BoxCollider::setSize(float width, float height)
     {
         this->height = height;
         this->width = width;

@@ -47,4 +47,5 @@ class Character : public sf::Drawable, public collider::HasCollider
         void setPosition(sf::Vector2f pos) {sprite.setPosition(pos);}
 
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+        
 };

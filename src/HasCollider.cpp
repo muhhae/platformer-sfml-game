@@ -3,6 +3,8 @@
 
 void collider::HasCollider::collision(collider::HasCollider* other)
 {
+    if (!other->getCollider().getSolid() || !getCollider().getSolid()) return;  
+
     sf::Vector2f move = col.vectorCollision(&other->getCollider());
 
     if (!isGrounded)

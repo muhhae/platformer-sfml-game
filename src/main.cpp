@@ -1,9 +1,13 @@
 #include "lib/lib.hpp"
 #include "lib/Character.hpp"
+#include "lib/GameObject.hpp"
+#include <random>
 
 
 int main()
 {
+    srand(time(NULL));
+
     sf::RenderWindow window(sf::VideoMode().getDesktopMode(), "My Game", sf::Style::Default);
     sf::Event event;
     sf::View view;
@@ -27,12 +31,12 @@ int main()
     Character Mage("Mage", sf::Vector2i(acuan.getSize().x/2, acuan.getSize().y* 0.57));
     Mage.setPosition(sf::Vector2f(200, 0));
     Mage.getCollider().setWeight(2);
-    Mage.getCollider().setSize(200, 100);
+    Mage.getCollider().setSize(100, 200);
 
     Character Knight("Knight", sf::Vector2i(55,61));
     Knight.setPosition(sf::Vector2f(0, 0));
     Knight.getCollider().setWeight(1);
-    Knight.getCollider().setSize(150, 100);
+    Knight.getCollider().setSize(100, 150);
 
     view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
     view.setSize(window.getSize().x, window.getSize().y);
@@ -40,26 +44,45 @@ int main()
     background.setPosition(sf::Vector2f(view.getCenter()));
     background.move(0, 580);
 
-    collider::HasCollider boxCol;
-    boxCol.getCollider().setSize(300, 3000);
+    GameObject boxCol;
+    boxCol.getCollider().setSize(3000, 300);
     boxCol.getCollider().updatePos(background.getPosition() + sf::Vector2f(0, -228));
     boxCol.getCollider().setWeight(100000);
+    boxCol.getCollider().isSolid(0);
 
-    collider::HasCollider block;
-    block.getCollider().setSize(200, 200);
-    block.getCollider().updatePos(background.getPosition() + sf::Vector2f(400, -528));
-    block.getCollider().debug();
+    std::vector<collider::HasCollider*> col;
+    std::vector<GameObject*> blocks;
+    sf::Vector2f blockPos = sf::Vector2f(-400, -528);
+    int gap = 0;
+
+    for (int i = 0; i < 100; i++)
+    {
+        GameObject* block = new GameObject();
+
+        block->load("Sprite/Block/block.jpeg");
+        block->getSprite().setOrigin(block->getSprite().getLocalBounds().width/2, block->getSprite().getLocalBounds().height/2);
+        block->getSprite().setPosition(background.getPosition() + blockPos);
+        block->getSprite().setScale(0.8, 0.8);
+        block->getCollider().setSize(block->getSprite().getLocalBounds().width * block->getSprite().getScale().x, block->getSprite().getLocalBounds().height * block->getSprite().getScale().y);
+        block->getCollider().updatePos(background.getPosition() + blockPos);
+        block->getCollider().debug();
+
+        blocks.push_back(block);
+        col.push_back(block);
+
+        blockPos += sf::Vector2f(block->getSprite().getLocalBounds().width * block->getSprite().getScale().x + gap, (rand() % 2 > 0 ? -1 : 1) * rand() % (int)(block->getSprite().getLocalBounds().height * block->getSprite().getScale().y));
+        gap += 10;
+    }
 
     Mage.getCollider().debug(true);
     Knight.getCollider().debug();
     boxCol.getCollider().debug();
 
-    std::vector<collider::HasCollider*> col;
+    
 
     col.push_back(&Mage);
     col.push_back(&Knight);
     col.push_back(&boxCol);
-    col.push_back(&block);
 
     Mage.getCollider().setType(0);    
     Knight.getCollider().setType(0);
@@ -89,7 +112,7 @@ int main()
 
             if (event.type == sf::Event::Resized)
             {
-                view.setSize(event.size.width/2, event.size.height/2);
+                view.setSize(window.getSize().x, window.getSize().y);
             }
 
             
@@ -112,7 +135,7 @@ int main()
         Knight.update();
         Mage.update();
 
-        view.setCenter(Knight.getPosition().x, view.getCenter().y);
+        view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
 
         window.setView(view);
 
@@ -122,10 +145,12 @@ int main()
 
         window.draw(Knight);
         window.draw(Mage);
-        
+        window.draw(boxCol);
 
-        boxCol.getCollider().colDraw(window);
-        block.getCollider().colDraw(window);
+        for (const auto& b : blocks)
+        {
+            window.draw(*b);
+        }
 
         window.display();
     }
