@@ -16,7 +16,8 @@ int main()
     window.setFramerateLimit(100);
 
     sf::Texture bg;
-    bg.loadFromFile("Sprite/BG/bg.gif");
+    bg.loadFromFile("Sprite/BG/BG3.jpg");
+    bg.setSmooth(0);
 
     sf::Sprite background;
 
@@ -24,6 +25,7 @@ int main()
     background.setTexture(bg);
     background.setTextureRect(sf::IntRect(0, 0, 10000, 2160));
     background.setOrigin(bg.getSize().x, background.getTextureRect().height/2);
+    background.setScale(3, 3);
 
     sf::Image acuan;
     acuan.loadFromFile("Sprite/Mage/Idle/0.gif");
@@ -65,7 +67,7 @@ int main()
         block->getSprite().setScale(0.8, 0.8);
         block->getCollider().setSize(block->getSprite().getLocalBounds().width * block->getSprite().getScale().x, block->getSprite().getLocalBounds().height * block->getSprite().getScale().y);
         block->getCollider().updatePos(background.getPosition() + blockPos);
-        block->getCollider().debug();
+        // block->getCollider().debug();
 
         blocks.push_back(block);
         col.push_back(block);
@@ -74,9 +76,9 @@ int main()
         gap += 10;
     }
 
-    Mage.getCollider().debug(true);
-    Knight.getCollider().debug();
-    boxCol.getCollider().debug();
+    // Mage.getCollider().debug(true);
+    // Knight.getCollider().debug();
+    // boxCol.getCollider().debug();
 
     
 
@@ -89,6 +91,8 @@ int main()
      
     Mage.load();
     Knight.load();   
+
+    background.move(0, 800);
 
     while (window.isOpen())
     {
