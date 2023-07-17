@@ -125,7 +125,7 @@ int main()
         Knight.update();
         Mage.update();
 
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 12; i++)
         {
             collider::checkCollision();
 

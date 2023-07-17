@@ -1,5 +1,8 @@
-*.o 
-*.d
-*.exe
-
+**/.o 
+**/.d
+**/.exe
+**/Makefile
+**/.Make
+/bin/Debug
+/obj/Debug
 

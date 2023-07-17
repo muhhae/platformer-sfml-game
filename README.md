@@ -1,4 +1,4 @@
 # Simple Game with SFML in C++
 
-Build with make
+Build with premake 
 
