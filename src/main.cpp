@@ -30,7 +30,7 @@ int main()
     sf::Image acuan;
     acuan.loadFromFile("Sprite/Mage/Idle/0.gif");
 
-    Character Mage("Mage", sf::Vector2i(acuan.getSize().x/2, acuan.getSize().y* 0.57));
+    Character Mage("Mage", sf::Vector2i(acuan.getSize().x/2, acuan.getSize().y * 0.57 ));
     Mage.setPosition(sf::Vector2f(200, 0));
     Mage.getCollider().setWeight(2);
     Mage.getCollider().setSize(100, 200);
@@ -80,7 +80,7 @@ int main()
 
     blockPos = sf::Vector2f(0, -28);
 
-    Mage.getCollider().debug(true);
+    Mage.getCollider().debug();
     Knight.getCollider().debug();
 
     Mage.getCollider().setKinematic(false);    
@@ -125,10 +125,13 @@ int main()
         Knight.update();
         Mage.update();
 
-        collider::checkCollision();
+        for (int i = 0; i < 15; i++)
+        {
+            collider::checkCollision();
 
-        Knight.colTempUpdate();
-        Mage.colTempUpdate();
+            Knight.colTempUpdate();
+            Mage.colTempUpdate();
+        }
 
         view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
 
