@@ -52,9 +52,8 @@ int main()
     boxCol.getCollider().setWeight(100000);
     boxCol.getCollider().isSolid(0);
 
-    std::vector<collider::HasCollider*> col;
     std::vector<GameObject*> blocks;
-    sf::Vector2f blockPos = sf::Vector2f(-400, -528);
+    sf::Vector2f blockPos = sf::Vector2f(-400, -28);
     int gap = 0;
 
     for (int i = 0; i < 100; i++)
@@ -66,28 +65,26 @@ int main()
         block->getSprite().setPosition(background.getPosition() + blockPos);
         block->getSprite().setScale(0.8, 0.8);
         block->getCollider().setSize(block->getSprite().getLocalBounds().width * block->getSprite().getScale().x, block->getSprite().getLocalBounds().height * block->getSprite().getScale().y);
-        block->getCollider().updatePos(background.getPosition() + blockPos);
-        // block->getCollider().debug();
+        
+        block->getCollider().debug();
+        block->getCollider().setKinematic(true);
+
+        if (i == 4) block->getSprite().move(0, -1 * block->getSprite().getLocalBounds().height * block->getSprite().getScale().y);
+
+        block->getCollider().updatePos(block->getSprite().getPosition());
 
         blocks.push_back(block);
-        col.push_back(block);
 
-        blockPos += sf::Vector2f(block->getSprite().getLocalBounds().width * block->getSprite().getScale().x + gap, (rand() % 2 > 0 ? -1 : 1) * rand() % (int)(block->getSprite().getLocalBounds().height * block->getSprite().getScale().y));
-        gap += 10;
+        blockPos += sf::Vector2f(block->getSprite().getLocalBounds().width * block->getSprite().getScale().x + gap, 0);
     }
 
-    // Mage.getCollider().debug(true);
-    // Knight.getCollider().debug();
-    // boxCol.getCollider().debug();
+    blockPos = sf::Vector2f(0, -28);
 
-    
+    Mage.getCollider().debug(true);
+    Knight.getCollider().debug();
 
-    col.push_back(&Mage);
-    col.push_back(&Knight);
-    col.push_back(&boxCol);
-
-    Mage.getCollider().setType(0);    
-    Knight.getCollider().setType(0);
+    Mage.getCollider().setKinematic(false);    
+    Knight.getCollider().setKinematic(false);
      
     Mage.load();
     Knight.load();   
@@ -121,23 +118,17 @@ int main()
 
             
         }
+
         Knight.input(0);
         Mage.input(1);
 
-        for (int i = 0; i < col.size(); i++)
-        {
-            if (col.at(i)->getCollider().getType() == true) continue;
-
-            for (int j = 0; j < col.size(); j++)
-            {
-                if (i == j) continue;
-
-                col.at(i)->collision(col.at(j));
-            }
-        }
-
         Knight.update();
         Mage.update();
+
+        collider::checkCollision();
+
+        Knight.colTempUpdate();
+        Mage.colTempUpdate();
 
         view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
 
@@ -147,14 +138,16 @@ int main()
 
         window.draw(background);
 
-        window.draw(Knight);
-        window.draw(Mage);
         window.draw(boxCol);
 
         for (const auto& b : blocks)
         {
             window.draw(*b);
         }
+
+        window.draw(Knight);
+        window.draw(Mage);
+       
 
         window.display();
     }

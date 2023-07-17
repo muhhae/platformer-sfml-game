@@ -23,7 +23,7 @@ namespace collider
         box.setOutlineThickness(3 * showOutline);
     }
 
-    void BoxCollider::setType(bool kinematic)
+    void BoxCollider::setKinematic(bool kinematic)
     {
         this->kinematic = kinematic;
     }
@@ -89,12 +89,10 @@ namespace collider
             }
         }
 
-        // std::cout<<"x : "<<result.x<<" y : "<<result.y<<std::endl;
-
         if (abs(result.x) > abs(result.y)) result.x *= 0;
         else result.y *= 0;
 
-        result *= other->weight / (weight + other->getWeight());
+        if (!other->isKinematic()) result *= other->weight / (weight + other->getWeight());
 
         return result;
     }

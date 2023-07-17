@@ -7,13 +7,17 @@ namespace collider
     {
         protected:
             bool isGrounded;
-            std::vector<sf::Vector2f> colMove;
+            sf::Vector2f colMove;
             collider::BoxCollider col;
         public:
-            HasCollider(){}
+            HasCollider();
             void collision(collider::HasCollider * other);
             BoxCollider& getCollider(){ return col;}
     };
+    
+    inline std::vector<std::shared_ptr<HasCollider>> hasColliderVector;
+
+    void checkCollision();
 }
 
 

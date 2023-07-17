@@ -116,9 +116,6 @@ void Character::input(int controlType)
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) sprite.rotate(1);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) sprite.rotate(-1);
-
-    isGrounded = false;
-    colMove.clear();
 }
 
 void Character::update()
@@ -158,14 +155,16 @@ void Character::update()
     else if(isGrounded) switchState("Idle");
     
     sprite.move(0, -1 * isJump);
-
-    for (const auto& mov : colMove)
-    {
-        if (mov.y > 0 && isGrounded) continue;
-        sprite.move(mov);
-    }
-
     animUpdate();
+
     col.updatePos(getPosition());
+    isGrounded = false;
+}
+
+void Character::colTempUpdate() {
+    sprite.move(colMove);
+    col.updatePos(getPosition());
+
+    colMove = sf::Vector2f(0, 0);
 }
 

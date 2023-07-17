@@ -28,14 +28,15 @@ namespace collider
             float getWeight(){return weight;}
 
             void updatePos(sf::Vector2f position);
+            void movePos(sf::Vector2f offset);
             void setSize(float width, float height);
             void setWeight(float weight = 1);
             void colDraw(sf::RenderTarget& target) const;
             void isSolid(bool solid = true){this->solid = solid;}
 
             void debug(bool showOutline = true);
-            void setType(bool kinematic);
-            bool getType(){return kinematic;}
+            void setKinematic(bool kinematic);
+            bool isKinematic(){return kinematic;}
             bool getSolid(){return solid;}
             
             BoxCollider(float height = 150, float width = 100);

@@ -10,7 +10,7 @@ void GameObject::load(std::string dir)
 {
     if (!texture.loadFromFile(dir)) return;
     
-    std::cout << "Loading " << dir << std::endl;
+    // std::cout << "Loading " << dir << std::endl;
     sprite.setTexture(texture);
     isLoaded = true;
 }

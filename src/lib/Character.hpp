@@ -40,6 +40,7 @@ class Character : public sf::Drawable, public collider::HasCollider
         void switchState(std::string state);
         void update();
         void animUpdate();
+        void colTempUpdate();
 
         void input(int);
 
