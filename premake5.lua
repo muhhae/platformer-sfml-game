@@ -1,28 +1,45 @@
 -- premake5.lua
-workspace "SFMLGame"
+-- created by muhhae
+
+include ("staticlib.lua") --for vcpkg to choose static library for linking
+
+workspace "App"
     configurations { "Debug", "Release" }
+    platforms { "x64" }
 
-SRCDIR = "src"
+project "App"
+    kind "ConsoleApp" --App Type
+    language "C++" --Languange
 
-project "SFMLGame"
-    kind "WindowedApp"
-    language "C++"
-    buildoptions {"-std=c++23", "-Wall"}
-    linkoptions {"-lsfml-graphics", "-lsfml-window", "-lsfml-system"}
+    cppdialect "C++latest"
 
-    targetdir "bin/%{cfg.buildcfg}"
+    targetdir "bin/%{cfg.buildcfg}" 
     objdir "obj/%{cfg.buildcfg}"
 
-    files {
-        "%{SRCDIR}/**.h",
-        "%{SRCDIR}/**.hpp", 
-        "%{SRCDIR}/**.cpp"
+    files { 
+        "App/**.cpp",
     }
+
+    includedirs {
+        "App",
+    }
+    
+    links {
+        "winmm", "gdi32"
+    }
+
+    staticruntime "On" --static runtime for msvc
+    dpiawareness "HighPerMonitor" --high dpi awareness for msvc
+    flags {
+        "MultiProcessorCompile" --multi processor compile for msvc
+    }
+    
+    defines { "SFML_STATIC" } --static sfml
 
     filter "configurations:Debug"
         defines { "DEBUG" }
         symbols "On"
 
     filter "configurations:Release"
-        defines { "NDEBUG" }
+        defines { "RELEASE" }
         optimize "On"

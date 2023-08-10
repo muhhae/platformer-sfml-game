@@ -1,8 +1,46 @@
-**/.o 
-**/.d
-**/.exe
-**/Makefile
-**/.Make
-/bin/Debug
-/obj/Debug
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+#visual studi proj and sln
+*.vcxproj
+*.vcxproj.filters
+*.sln
+*.vcxproj.user
+
+#output
+bin/
+obj/
+
+.vs
+.vscode
 

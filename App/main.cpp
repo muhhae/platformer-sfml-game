@@ -61,15 +61,19 @@ int main()
         GameObject* block = new GameObject();
 
         block->load("Sprite/Block/block.jpeg");
-        block->getSprite().setOrigin(block->getSprite().getLocalBounds().width/2, block->getSprite().getLocalBounds().height/2);
+        block->getSprite().setOrigin(block->getSprite().getLocalBounds().width/2, 
+                                     block->getSprite().getLocalBounds().height/2);
         block->getSprite().setPosition(background.getPosition() + blockPos);
         block->getSprite().setScale(0.8, 0.8);
-        block->getCollider().setSize(block->getSprite().getLocalBounds().width * block->getSprite().getScale().x, block->getSprite().getLocalBounds().height * block->getSprite().getScale().y);
+        block->getCollider().setSize(block->getSprite().getLocalBounds().width * block->getSprite().getScale().x, 
+                                     block->getSprite().getLocalBounds().height * block->getSprite().getScale().y);
         
         block->getCollider().debug();
         block->getCollider().setKinematic(true);
 
-        if (i == 4) block->getSprite().move(0, -1 * block->getSprite().getLocalBounds().height * block->getSprite().getScale().y);
+        if (i == 4) block->getSprite().move(0, 
+                                            -1 * block->getSprite().getLocalBounds().height 
+                                            * block->getSprite().getScale().y);
 
         block->getCollider().updatePos(block->getSprite().getPosition());
 
@@ -95,8 +99,10 @@ int main()
     {
         while (window.pollEvent(event))
         {   
-            if (event.type == sf::Event::Closed) window.close();
-
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return 0;
+            }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
 
             if (event.type == sf::Event::KeyReleased)
@@ -115,10 +121,11 @@ int main()
             {
                 view.setSize(window.getSize().x, window.getSize().y);
             }
-
             
         }
-
+        
+        timer::update();
+        
         Knight.input(0);
         Mage.input(1);
 
@@ -134,13 +141,11 @@ int main()
         }
 
         view.setCenter(Knight.getPosition().x, Knight.getPosition().y);
-
         window.setView(view);
 
         window.clear(sf::Color::White);
 
         window.draw(background);
-
         window.draw(boxCol);
 
         for (const auto& b : blocks)
@@ -150,7 +155,6 @@ int main()
 
         window.draw(Knight);
         window.draw(Mage);
-       
 
         window.display();
     }

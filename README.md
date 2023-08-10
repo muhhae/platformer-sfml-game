@@ -1,4 +1,4 @@
 # Simple Game with SFML in C++
 
-Build with premake 
+setup dependencies directory then build project with premake then compile it with your compiler
 

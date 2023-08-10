@@ -23,27 +23,25 @@ void Character::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void Character::load(std::string dir, std::string extension )
 {
-    run.load("Run" ,dir, name, extension);
-    idle.load("Idle" ,dir, name, extension);
-    jump.load("Jump" ,dir, name, extension);
-    fall.load("Fall" ,dir, name, extension);
+    states.resize(4);
+    
+    states.at((int)State::Run).load("Run" ,dir, name, extension);
+    states.at((int)State::Idle).load("Idle" ,dir, name, extension);
+    states.at((int)State::Jump).load("Jump" ,dir, name, extension);
+    states.at((int)State::Fall).load("Fall" ,dir, name, extension);
 }
 
-void Character::switchState(std::string state)
+void Character::switchState(State state)
 {
-    if (currentState != state)
-    {
-        currentState = state;   
-        frame = 0;
-    }
+    if (currentState == state) return;
+    
+    currentState = state;   
+    frame = 0;
 }
 
 void Character::animUpdate()
 {
-    if (currentState == "Run") sprite.setTexture(run.get(frame));
-    else if (currentState == "Idle") sprite.setTexture(idle.get(frame));
-    else if (currentState == "Jump") sprite.setTexture(jump.get(frame));
-    else if (currentState == "Fall") sprite.setTexture(fall.get(frame));
+    sprite.setTexture(states.at((int)currentState).get(frame));
 }
 
 void Character::input(int controlType)
@@ -54,7 +52,7 @@ void Character::input(int controlType)
         {
             if (isGrounded)
             {
-                isJump = 7;
+                verticalVelocity = 7;
                 doJump = true;
             }
         }
@@ -87,7 +85,7 @@ void Character::input(int controlType)
         {
             if (isGrounded)
             {
-                isJump = 7;
+                verticalVelocity = 7;
                 doJump = true;
             }
         }
@@ -120,18 +118,24 @@ void Character::input(int controlType)
 
 void Character::update()
 {
-    frame++;
-    if (frame > 99) frame = 0;
+    timeElapsed += timer::deltaTime;
+    
+    if (timeElapsed >= 1.0f / fps) timeElapsed = 0, frame++;
+    
+    // std::cout << "Time Elapsed : " << timeElapsed << "\n"
+    //           << "FPS : " << fps << "\n"
+    //           << "Frame : " << frame << "\n"
+    //           << "1/FPS : " << 1.0f / fps << "\n";
 
-    if (!isGrounded) isJump -= 0.1;
-    else if(!doJump) isJump = -0.1;
+    if (!isGrounded) verticalVelocity -= 0.1;
+    else if(!doJump) verticalVelocity = -0.1;
 
     doJump = !isGrounded;
 
     if (!isGrounded)
     {
-        if (isJump > 0) switchState("Jump");
-        else if (isJump < 0) switchState("Fall");
+        if (verticalVelocity > 0) switchState(State::Jump);
+        else if (verticalVelocity < 0) switchState(State::Fall);
     }
 
     if (isMove)
@@ -149,12 +153,12 @@ void Character::update()
 
         if (isGrounded)
         {
-            switchState("Run");
+            switchState(State::Run);
         }
     }
-    else if(isGrounded) switchState("Idle");
+    else if(isGrounded) switchState(State::Idle);
     
-    sprite.move(0, -1 * isJump);
+    sprite.move(0, -1 * verticalVelocity);
     animUpdate();
 
     col.updatePos(getPosition());

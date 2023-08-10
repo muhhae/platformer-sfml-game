@@ -15,29 +15,34 @@ class Character : public sf::Drawable, public collider::HasCollider
         sf::Vector2f scale = sf::Vector2f(4,4);
 
         sf::Sprite sprite;
-
-        TextureManager run;
-        TextureManager idle;
-        TextureManager jump;
-        TextureManager fall;
-
-        std::string currentState = "Idle";
+        
+        enum class State
+        {
+            Idle,
+            Run,
+            Jump,
+            Fall
+        };
+        
+        std::vector<TextureManager> states;
+        State currentState = State::Idle;
 
         int frame = 0;
         int groundCount = 0;
 
         bool isMove, isMoveJump, isKanan, doJump;
 
-        float isJump;
+        float verticalVelocity;
+        
+        float fps = 10;
+        float timeElapsed = 0;
 
     public :
         Character();
         Character(std::string name, sf::Vector2i origin);
 
-        // void setPosition(sf::Vector2f position);
-
         void load(std::string dir = "Sprite", std::string extension = "gif");
-        void switchState(std::string state);
+        void switchState(State state);
         void update();
         void animUpdate();
         void colTempUpdate();
@@ -45,7 +50,7 @@ class Character : public sf::Drawable, public collider::HasCollider
         void input(int);
 
         sf::Vector2f getPosition() { return sprite.getPosition(); }
-        void setPosition(sf::Vector2f pos) {sprite.setPosition(pos);}
+        void setPosition(sf::Vector2f pos) { sprite.setPosition(pos); }
 
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
         
