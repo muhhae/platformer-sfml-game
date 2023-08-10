@@ -36,6 +36,10 @@ class Character : public sf::Drawable, public collider::HasCollider
         
         float fps = 10;
         float timeElapsed = 0;
+        
+        float speed = 300;
+        float gravity = 980;
+        float jumpForce = 700;
 
     public :
         Character();

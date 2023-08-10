@@ -11,7 +11,6 @@ int main()
         srand(time(NULL));
 
         sf::RenderWindow window(sf::VideoMode().getDesktopMode(), "My Game", sf::Style::Default);
-        sf::Event event;
         sf::View view;
 
         bool full = true;
@@ -107,14 +106,23 @@ int main()
 
         while (window.isOpen())
         {
+            sf::Event event;
             while (window.pollEvent(event))
-            {   
+            {
+                std::cout << "Event : " << event.type << "\n";
+                std::cout << "sf::Event::Closed : " << sf::Event::Closed << "\n";
                 if (event.type == sf::Event::Closed) {
+                    std::cout << "Window Closed\n";
                     window.close();
                     return 0;
                 }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) window.close();
-
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) 
+                {
+                    std::cout << "Window Closed\n";
+                    window.close();
+                    return 0;
+                }
+                
                 if (event.type == sf::Event::KeyReleased)
                 {
                     if (event.key.code == sf::Keyboard::X)
@@ -132,7 +140,7 @@ int main()
                 }
                 
             }
-            
+            std::cout << "Window Opened\n";
             timer::update();
             
             Knight.input(0);
@@ -181,11 +189,14 @@ int main()
 
             window.display();
         }
+        std::cout << "End Try\n";
     }
     catch (const std::exception& e)
     {
+        std::cout << "Error : \n";
         std::cerr << e.what() << '\n';
     }
+    std::cout << "End\n";
     
     return 0;
 }

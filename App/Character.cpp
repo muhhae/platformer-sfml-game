@@ -52,7 +52,7 @@ void Character::input(int controlType)
         {
             if (isGrounded)
             {
-                verticalVelocity = 7;
+                verticalVelocity = jumpForce;
                 doJump = true;
             }
         }
@@ -85,7 +85,7 @@ void Character::input(int controlType)
         {
             if (isGrounded)
             {
-                verticalVelocity = 7;
+                verticalVelocity = jumpForce;
                 doJump = true;
             }
         }
@@ -118,6 +118,8 @@ void Character::input(int controlType)
 
 void Character::update()
 {
+    sf::Vector2f moveVector = sf::Vector2f(0, 0);
+    
     timeElapsed += timer::deltaTime;
     
     if (timeElapsed >= 1.0f / fps) timeElapsed = 0, frame++;
@@ -127,7 +129,7 @@ void Character::update()
     //           << "Frame : " << frame << "\n"
     //           << "1/FPS : " << 1.0f / fps << "\n";
 
-    if (!isGrounded) verticalVelocity -= 0.1;
+    if (!isGrounded) verticalVelocity -= gravity * timer::deltaTime;
     else if(!doJump) verticalVelocity = -0.1;
 
     doJump = !isGrounded;
@@ -142,12 +144,12 @@ void Character::update()
     {
         if (isKanan)
         {
-            sprite.move(4, 0);
+            moveVector.x += speed;
             sprite.setScale(scale.x, scale.y);
         }   
         else 
         {
-            sprite.move(-4, 0);
+            moveVector.x -= speed;
             sprite.setScale(-1 * scale.x, scale.y);
         }
 
@@ -158,8 +160,10 @@ void Character::update()
     }
     else if(isGrounded) switchState(State::Idle);
     
-    sprite.move(0, -1 * verticalVelocity);
+    moveVector.y -= verticalVelocity;
     animUpdate();
+    
+    sprite.move(moveVector * timer::deltaTime);
 
     col.updatePos(getPosition());
     isGrounded = false;
