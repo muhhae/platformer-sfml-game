@@ -4,7 +4,7 @@
 
 TextureManager::~TextureManager()
 {
-    for (auto* i : texture) delete i;
+    for (auto & i : texture) delete i;
     texture.clear();
 }
 

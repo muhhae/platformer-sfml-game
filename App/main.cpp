@@ -109,18 +109,14 @@ int main()
             sf::Event event;
             while (window.pollEvent(event))
             {
-                std::cout << "Event : " << event.type << "\n";
-                std::cout << "sf::Event::Closed : " << sf::Event::Closed << "\n";
                 if (event.type == sf::Event::Closed) {
                     std::cout << "Window Closed\n";
                     window.close();
-                    return 0;
                 }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) 
                 {
                     std::cout << "Window Closed\n";
                     window.close();
-                    return 0;
                 }
                 
                 if (event.type == sf::Event::KeyReleased)
@@ -140,7 +136,6 @@ int main()
                 }
                 
             }
-            std::cout << "Window Opened\n";
             timer::update();
             
             Knight.input(0);
